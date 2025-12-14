@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Resume Matcher</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            background: linear-gradient(135deg, #e3f2fd, #f8fbff);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: #ffffff;
+            max-width: 900px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(25, 118, 210, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #555;
+            margin-bottom: 25px;
+            font-size: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 180px;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #bbdefb;
+            font-size: 15px;
+            resize: none;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #1976d2;
+            box-shadow: 0 0 6px rgba(25, 118, 210, 0.3);
+        }
+
+        button {
+            margin-top: 15px;
+            width: 100%;
+            padding: 14px;
+            background: #1976d2;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #0d47a1;
+        }
+
+        .results {
+            margin-top: 35px;
+        }
+
+        .job-card {
+            background: #f1f8ff;
+            border-left: 6px solid #1976d2;
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .job-card h3 {
+            margin: 0 0 8px;
+            font-size: 20px;
+        }
+
+        .job-card h3 a {
+            text-decoration: none;
+            color: #0d47a1;
+        }
+
+        .job-card p {
+            margin: 6px 0;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            background: #bbdefb;
+            border-radius: 12px;
+            height: 22px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 22px;
+            transition: width 1s ease-in-out;
+        }
+
+        .skills {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .matched {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .missing {
+            color: #c62828;
+            font-weight: bold;
+        }
+
+        .suggestion {
+            margin-top: 8px;
+            color: #1976d2;
+            font-style: italic;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            textarea {
+                height: 150px;
+            }
+
+            .job-card h3 {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <h1>AI Resume Matcher</h1>
+    <p class="subtitle">
+        Paste your resume and instantly find the best job matches using AI
+    </p>
+
+    <!-- Resume Form -->
+    <form method="POST">
+        {% csrf_token %}
+        <textarea name="resume_text" placeholder="Paste your resume text here..." required></textarea>
+        <button type="submit">Match Jobs</button>
+    </form>
+
+    <!-- Results -->
+    {% if results %}
+    <div class="results">
+        <h2 style="color:#1976d2;">Matched Jobs</h2>
+
+        {% for job, score, matched, missing, suggestion in results %}
+        <div class="job-card">
+
+            <h3>
+                <a href="{% url 'job_detail' job.id %}">
+                    {{ job.title }}
+                </a>
+            </h3>
+
+            <p><strong>Description:</strong> {{ job.description }}</p>
+            <p><strong>Match Score:</strong> {{ score|floatformat:2 }}%</p>
+
+            <div class="progress-bar">
+                <div class="progress-fill" data-score="{{ score }}">
+                    {{ score|floatformat:2 }}%
+                </div>
+            </div>
+
+            <div class="skills">
+                <strong>Matched Skills:</strong>
+                {% for skill in matched %}
+                    <span class="matched">{{ skill }}</span>{% if not forloop.last %}, {% endif %}
+                {% empty %} None {% endfor %}
+            </div>
+
+            <div class="skills">
+                <strong>Missing Skills:</strong>
+                {% for skill in missing %}
+                    <span class="missing">{{ skill }}</span>{% if not forloop.last %}, {% endif %}
+                {% empty %} None {% endfor %}
+            </div>
+
+            <div class="suggestion">💡 {{ suggestion }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+document.querySelectorAll('.progress-fill').forEach(el => {
+    const score = parseFloat(el.dataset.score);
+
+    let color;
+    if (score >= 80) color = '#2e7d32';
+    else if (score >= 50) color = '#f9a825';
+    else color = '#c62828';
+
+    el.style.backgroundColor = color;
+    setTimeout(() => {
+        el.style.width = score + '%';
+    }, 200);
+});
+</script>
+
+</body>
+</html>

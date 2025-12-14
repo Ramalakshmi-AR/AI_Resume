@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Apply for Job</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            background: linear-gradient(135deg, #e3f2fd, #f8fbff);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(25, 118, 210, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .job-title {
+            text-align: center;
+            color: #0d47a1;
+            margin-bottom: 25px;
+            font-size: 18px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #bbdefb;
+            font-size: 14px;
+            outline: none;
+        }
+
+        textarea {
+            resize: none;
+            height: 120px;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #1976d2;
+            box-shadow: 0 0 6px rgba(25, 118, 210, 0.3);
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 14px;
+            background: #1976d2;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0d47a1;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h1>Apply Online</h1>
+    <div class="job-title">Job: {{ job.title }}</div>
+
+    <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>Full Name</label>
+    <input type="text" name="name" required>
+
+    <label>Email</label>
+    <input type="email" name="email" required>
+
+    <label>Phone</label>
+    <input type="text" name="phone" required>
+
+    <label>Cover Letter</label>
+    <textarea name="cover_letter"></textarea>
+
+    <label>Resume (PDF only)</label>
+    <input type="file" name="resume_pdf" accept=".pdf" required>
+
+    <button type="submit">Apply Now</button>
+</form>
+
+</div>
+</body>
+</html>
