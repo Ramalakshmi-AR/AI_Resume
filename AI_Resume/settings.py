@@ -11,7 +11,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ======================
 SECRET_KEY = os.environ.get('SECRET_KEY', 'unsafe-secret-key')
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'ai_resume-2.onrender.com').split(',')
+ALLOWED_HOSTS = ['ai-resume-2-jt68.onrender.com']
+
 
 # ======================
 # APPLICATIONS
