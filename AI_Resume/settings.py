@@ -8,12 +8,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY
 # ======================
 SECRET_KEY = os.environ.get('SECRET_KEY', 'unsafe-secret-key')
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = False
 
-ALLOWED_HOSTS = os.environ.get(
-    'ALLOWED_HOSTS',
-    'localhost,127.0.0.1'
-).split(',')
+
+ALLOWED_HOSTS = ['ai-resume-ia7k.onrender.com']
+
+
 
 # ======================
 # APPLICATIONS
