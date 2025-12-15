@@ -9,6 +9,5 @@ urlpatterns = [
     path('apply/<int:job_id>/', views.apply_job, name='apply_job'),
     path('apply-success/', views.apply_success, name='apply_success'),
 ]
-
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
