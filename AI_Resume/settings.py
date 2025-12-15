@@ -1,19 +1,17 @@
 from pathlib import Path
 import os
-import dj_database_url
 
+# ======================
+# BASE DIRECTORY
+# ======================
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ======================
 # SECURITY
 # ======================
 SECRET_KEY = os.environ.get('SECRET_KEY', 'unsafe-secret-key')
-DEBUG = False
-
-
-ALLOWED_HOSTS = ['ai-resume-ia7k.onrender.com']
-
-
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'ai_resume-2.onrender.com').split(',')
 
 # ======================
 # APPLICATIONS
@@ -33,7 +31,7 @@ INSTALLED_APPS = [
 # ======================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # serve static files
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Serve static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -42,6 +40,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# ======================
+# URLS & TEMPLATES
+# ======================
 ROOT_URLCONF = 'AI_Resume.urls'
 
 TEMPLATES = [
@@ -63,9 +64,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'AI_Resume.wsgi.application'
 
 # ======================
-# DATABASE
+# DATABASE (SQLite)
 # ======================
-# Use SQLite locally (or if DATABASE_URL not set)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -96,17 +96,16 @@ USE_TZ = True
 # ======================
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # ======================
 # MEDIA FILES
 # ======================
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'  # resumes will be stored here (ephemeral on Render)
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # ======================
-# EMAIL CONFIG
+# EMAIL CONFIGURATION
 # ======================
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
