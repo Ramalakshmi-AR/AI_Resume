@@ -1,13 +1,16 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>AI Resume Screening</title>
-<link rel="stylesheet" href="{% static 'resume/css/style.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Screening</title>
+    <link rel="stylesheet" href="{% static 'resume/css/style.css' %}">
 </head>
 <body>
-<div class="container">
-<h1>AI Resume Screening System</h1>
-{% block content %}{% endblock %}
-</div>
+    <div class="container">
+        <h1>AI Resume Screening System</h1>
+        {% block content %}{% endblock %}
+    </div>
 </body>
 </html>

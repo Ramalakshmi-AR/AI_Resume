@@ -1,4 +1,5 @@
 from pathlib import Path
+import dj_database_url
 import os
 
 # ======================
@@ -10,11 +11,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY
 # ======================
 SECRET_KEY = os.environ.get('SECRET_KEY', 'unsafe-secret-key')
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
-# ALLOWED_HOSTS = ['ai-resume-2-jt68.onrender.com']
-ALLOWED_HOSTS = ['*']
+DEBUG = False
 
+ALLOWED_HOSTS = [
+    'ai-resume-2-jt68.onrender.com',
+    '.onrender.com',
+]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://ai-resume-2-jt68.onrender.com',
+]
 
 # ======================
 # APPLICATIONS
@@ -34,7 +40,7 @@ INSTALLED_APPS = [
 # ======================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Serve static files
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Serve static files in production
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -67,13 +73,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'AI_Resume.wsgi.application'
 
 # ======================
-# DATABASE (SQLite)
+# DATABASE
 # ======================
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR / 'db.sqlite3'),
-    }
+    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL', f"sqlite:///{BASE_DIR / 'db.sqlite3'}"))
 }
 
 # ======================
@@ -99,7 +102,8 @@ USE_TZ = True
 # ======================
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # ======================
 # MEDIA FILES
